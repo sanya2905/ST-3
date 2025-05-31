@@ -46,27 +46,24 @@ void TimedDoor::lock() {
 int TimedDoor::getTimeOut() const {
     return iTimeout;
 }
-
 void TimedDoor::throwState() {
     if (isThrow) {
-        throw std::runtime_error("Door has been opened too long!");
+        throw std::runtime_error("Дверь открыта слишком долго!");
     }
 }
+void Timer::sleep(int timeoutValue) {
+    if (timeoutValue <= 0) {
+        throw std::invalid_argument("Значение должно быть положительным!");
+    }
 
+    std::this_thread::sleep_for(std::chrono::seconds(timeoutValue));
+}
 void Timer::tregister(int timeoutValue, TimerClient* c) {
     if (timeoutValue <= 0) {
-        throw std::invalid_argument("Timeout value must be positive!");
+        throw std::invalid_argument("Значение должно быть положительным!");
     }
 
     this->client = c;
     sleep(timeoutValue);
     this->client->Timeout();
-}
-
-void Timer::sleep(int timeoutValue) {
-    if (timeoutValue <= 0) {
-        throw std::invalid_argument("Timeout value must be positive!");
-    }
-
-    std::this_thread::sleep_for(std::chrono::seconds(timeoutValue));
 }
